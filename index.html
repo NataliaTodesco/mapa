@@ -1,0 +1,189 @@
+<html>
+  <head>
+      <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <title>Trabajo Practico</title>
+
+     <!-- HERE JavaScript Libs & Style Sheets-->
+     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+  <body>
+    <section>
+        <nav class="navbar navbar-light" >
+            <a class="navbar-brand" id="nav"><img src="https://img.icons8.com/cute-clipart/25/000000/compass.png"/> Ubicación</a>
+          </nav>
+    </section>
+    <section class="container" id="mapa">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="display-5">Mapa</h1>
+                <p>Se mostrará un mapa con un marcador que señalará la latitud y longitud especificadas en la API.</p>
+                <p>En caso de que la llamada a la API no sea exitosa, se mostrará el mapa con un marcador ubicado en la UTN FRC.</p>
+                <p>Para ver el mapa presione en el siguiente botón:</p>
+                <div>
+                    <button class="btn btn-success" type="button" id="btn2">Consultar API</button>
+                  </div>
+                  <br>
+                  <div id="list-example" class="group">
+                    <button type="button" class="btn btn-lg btn-success" id="latitud"><img src="https://img.icons8.com/officel/40/4a90e2/latitude.png"/></button>
+                    <button type="button" class="btn btn-lg btn-success" id="longitud"><img src="https://img.icons8.com/officel/40/4a90e2/longitude.png"/></button>
+                    <button type="button" class="btn btn-lg btn-success" id="ubicacion"><img src="https://img.icons8.com/office/40/4a90e2/worldwide-location--v1.png"/></button>
+                  </div>
+                  <br>
+            </div>
+            <div style="width: 100vw;height: 500px;" id="mapContainer" class="col-md-8"></div>
+            <div class="col-md-8"><img class="img-fluid" src="https://cdn.pixabay.com/photo/2015/09/02/13/11/globes-918929_960_720.jpg" alt=""> </div>
+        </div>
+        </section>
+      <section>
+        <footer class="page-footer font-small blue pt-4">
+          <div class="container text-center text-md-left">
+            <div class="row">
+              <div class="col-md-6 mt-md-0 mt-3">
+                <h5 class="text-uppercase">Gracias por ver! <a href="https://github.com/1w1111957TodescoNatalia"><img src="https://img.icons8.com/color/48/000000/github-2.png"/></a></h5>
+                <p>Todesco Natalia Sabrina - Trabajo Práctico</p>
+              </div>
+            </div>
+        </footer>
+      </section>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+  </body>
+  <script>
+    $(document).ready(function () {
+      $("#mapContainer").hide();
+
+      $("#btn2").click(function () {
+        $('.img-fluid').remove();
+        $("#mapContainer").show();
+
+          $.ajax({
+              url: "https://nhorenstein.com/Coordenada/GetConPunto",
+              type: "GET",
+                success: function(result) {
+                  if (result.ok){
+                    swal("Consulta Exitosa", "", "success");
+                    Mapa(result.return.latitud,result.return.longitud);
+                  }
+                  else {
+                    swal(result.error);
+                  }
+                },
+                error: function(error) {
+                  console.log(error);
+                  swal("Consulta Fallida", "", "error");
+                  Mapa(-31.44233, -64.19324);
+                }
+          });
+      })
+    });
+  </script>
+  <script>
+    function Mapa(latitud, longitud){
+      var platform = new H.service.Platform({
+        apikey: 'OlP56zp7F_1FLWPv-nH1ZJSbaMUjbERMRixpOpFFECk'
+      });
+      var defaultLayers = platform.createDefaultLayers();
+      var latd = latitud;
+      var long =longitud;
+      var map = new H.Map(document.getElementById('mapContainer'),
+          defaultLayers.vector.normal.map,
+          {
+              center: { lat: latd, lng: long},
+              zoom: 16.8,
+              pixelRatio: window.devicePixelRatio || 1
+          }
+      );
+      window.addEventListener('resize', () => map.getViewPort().resize());
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+      
+      var LocationOfMarker = { lat: latd, lng: long };
+      var icon = new H.map.Icon('https://img.icons8.com/fluent/60/4a90e2/place-marker.png');
+      var marker = new H.map.Marker(LocationOfMarker, { icon: icon });
+      map.addObject(marker);
+      map.setCenter(LocationOfMarker);
+
+      addIml(map);
+    }
+</script>
+<script>
+  function addIml(map) {
+        const catalogHrn = 'hrn:here:data::olp-here:dh-showcase-dc-transit';
+        const layerId = 'dc-transit';
+        const service = platform.getIMLService();
+        const imlProvider = new H.service.iml.Provider(service, catalogHrn, layerId);
+        const style = imlProvider.getStyle();
+        const styleConfig = style.extractConfig(['iml']);
+        styleConfig.layers.iml.lines.draw.lines.dash = [1, 1];
+        styleConfig.layers.iml.lines.draw.lines.width = [[5, 5000], [8, 800], [10, 200], [12, 160], [14, 60], [18, 20]];
+        style.mergeConfig(styleConfig);
+
+        map.addLayer(new H.map.layer.TileLayer(imlProvider));
+    }
+</script>
+<script>
+  $(document).ready(function () {
+    $("#latitud").click(function () {
+      $.ajax({
+            url: "https://nhorenstein.com/Coordenada/GetConPunto",
+            type: "GET",
+              success: function(result) {
+                  swal("Latitud API: ",result.return.latitud);
+              },
+              error: function(error) {
+                swal("Latitud UTN FRC: ", "-31.44233");
+              }
+      });
+    });
+    $("#longitud").click(function () {
+      $.ajax({
+            url: "https://nhorenstein.com/Coordenada/GetConPunto",
+            type: "GET",
+              success: function(result) {
+                  swal("Longitud API: ",result.return.longitud);
+              },
+              error: function(error) {
+                swal("Longitud UTN FRC: ", "-64.19324");
+              }
+      });
+    });
+    $("#ubicacion").click(function () {
+      $.ajax({
+            url: "https://nhorenstein.com/Coordenada/GetConPunto",
+            type: "GET",
+              success: function(result) {
+                navigator.geolocation.getCurrentPosition(function(position){ 
+                $("#result").html("Found your location Lat : "+result.return.latitud+" Lang :"+ result.return.longitud);
+                });
+                swal("Su Ubicación: ","Latitud: "+result.return.latitud+", Longitud: "+result.return.longitud);
+              },
+              error: function(error) {
+                swal("Ubicación: ", "UTN FRC");
+              }
+      });
+    });
+  })
+</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+    crossorigin="anonymous"
+  ></script>
+</html>

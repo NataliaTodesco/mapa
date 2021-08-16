@@ -1,0 +1,36 @@
+nav{
+    background-color: #1b4332;
+}
+#nav{
+    color: white;
+}
+body{
+    background-image: url(https://cdn.pixabay.com/photo/2020/05/06/12/01/compass-5137269_960_720.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: white;
+}
+#mapa{
+    background-color: #40916c;
+    color: white;
+    padding: 3%;
+    margin-top: 5%;
+}
+a{
+    color: white;
+}
+footer{
+    background-color: #081c15;
+    color: #d8f3dc;
+    margin-top: 3%;
+}
+p{
+    margin-right: 2%;
+}
+#btn2{
+    width: 100%;
+}
+#latitud, #longitud, #ubicacion{
+    width: 32%;
+}
