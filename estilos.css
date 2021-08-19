@@ -4,6 +4,13 @@ nav{
 #nav{
     color: white;
 }
+#head{
+    background-image: url(https://cdn.pixabay.com/photo/2020/05/06/12/01/compass-5137269_960_720.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-bottom: 0%;
+}
 body{
     background-image: url(https://cdn.pixabay.com/photo/2020/05/06/12/01/compass-5137269_960_720.jpg);
     background-repeat: no-repeat;
@@ -15,7 +22,7 @@ body{
     background-color: #40916c;
     color: white;
     padding: 3%;
-    margin-top: 5%;
+    margin-top: 3%;
 }
 a{
     color: white;
