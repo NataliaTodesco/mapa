@@ -41,3 +41,11 @@ p{
 #latitud, #longitud, #ubicacion{
     width: 32%;
 }
+footer .btn{
+    background-color: red;
+    border: 1px solid var(--blanco);
+    color: var(--blanco);
+    margin: 5%;
+    padding-left: 30%;
+    padding-right: 30%;
+}
